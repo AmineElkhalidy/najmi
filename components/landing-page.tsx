@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   BadgeCheck,
@@ -31,15 +32,39 @@ type LandingPageProps = {
   locale: Locale;
 };
 
+type GoogleReview = {
+  authorName: string;
+  authorUrl: string | null;
+  text: string;
+  rating: number;
+  relativeTimeDescription: string;
+};
+
+type GoogleReviewsResponse = {
+  source: "google";
+  rating: number | null;
+  totalReviews: number;
+  reviews: GoogleReview[];
+};
+
 const languageLinks: Array<{ locale: Locale; label: string }> = [
   { locale: "fr", label: "FR" },
   { locale: "en", label: "EN" },
   { locale: "ar", label: "AR" },
 ];
 
+const WHATSAPP_URL = "https://wa.me/212659399604";
+const INSTAGRAM_URL = "https://www.instagram.com/najmi_optic/";
+const FACEBOOK_URL = "https://web.facebook.com/profile.php?id=61586937009405";
+const GOOGLE_MAPS_URL =
+  "https://www.google.com/maps/place/NAJMI+OPTIC+Laattaouia/@31.8301418,-7.3325142,15z/data=!3m1!4b1!4m6!3m5!1s0xda51740ced2d297:0x401e00290c24892!8m2!3d31.8301249!4d-7.3140601!16s%2Fg%2F11nbmbqqs6?entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D";
+
 export function LandingPage({ locale }: LandingPageProps) {
   const t = dictionary[locale];
   const isRtl = locale === "ar";
+  const [googleReviews, setGoogleReviews] = useState<GoogleReview[]>([]);
+  const [googleRating, setGoogleRating] = useState<number | null>(null);
+  const [googleReviewCount, setGoogleReviewCount] = useState(0);
 
   const navLinks = [
     { label: t.nav.services, href: "#services" },
@@ -60,6 +85,44 @@ export function LandingPage({ locale }: LandingPageProps) {
     { ...t.services.items[1], icon: Glasses },
     { ...t.services.items[2], icon: Sun },
   ];
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadGoogleReviews() {
+      try {
+        const response = await fetch(`/api/google-reviews?locale=${locale}`);
+        if (!response.ok) return;
+        const data = (await response.json()) as GoogleReviewsResponse;
+        if (cancelled) return;
+        setGoogleReviews(data.reviews ?? []);
+        setGoogleRating(data.rating ?? null);
+        setGoogleReviewCount(data.totalReviews ?? 0);
+      } catch {
+        // Keep fallback testimonials if Google API is unavailable.
+      }
+    }
+
+    loadGoogleReviews();
+    return () => {
+      cancelled = true;
+    };
+  }, [locale]);
+
+  const visibleReviews = useMemo(() => {
+    if (googleReviews.length > 0) {
+      return googleReviews.slice(0, 3).map((review) => ({
+        name: review.authorName,
+        text: review.text,
+        rating: review.rating,
+      }));
+    }
+
+    return t.reviews.items.map((review) => ({
+      ...review,
+      rating: 5,
+    }));
+  }, [googleReviews, t.reviews.items]);
 
   return (
     <main className="bg-[#f8f8f7] text-slate-900" dir={isRtl ? "rtl" : "ltr"}>
@@ -106,7 +169,7 @@ export function LandingPage({ locale }: LandingPageProps) {
               ))}
             </div>
             <a
-              href="https://wa.me/212600000000"
+              href={WHATSAPP_URL}
               className={cn(buttonVariants({ size: "sm" }), "md:inline-flex")}
             >
               {t.nav.whatsapp}
@@ -144,11 +207,16 @@ export function LandingPage({ locale }: LandingPageProps) {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="https://wa.me/212600000000" className={buttonVariants()}>
+              <a href={WHATSAPP_URL} className={buttonVariants()}>
                 <PhoneCall className="h-4 w-4" />
                 {t.hero.whatsapp}
               </a>
-              <a href="#contact" className={buttonVariants({ variant: "outline" })}>
+              <a
+                href={GOOGLE_MAPS_URL}
+                target="_blank"
+                rel="noreferrer"
+                className={buttonVariants({ variant: "outline" })}
+              >
                 <MapPin className="h-4 w-4" />
                 {t.hero.location}
               </a>
@@ -255,9 +323,15 @@ export function LandingPage({ locale }: LandingPageProps) {
             <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">
               {t.reviews.subtitle}
             </p>
+            {googleReviews.length > 0 && (
+              <p className="mx-auto mt-2 max-w-2xl text-xs text-slate-500 sm:text-sm">
+                Google rating: {googleRating?.toFixed(1) ?? "-"} / 5 (
+                {googleReviewCount} reviews)
+              </p>
+            )}
           </div>
           <div className="grid gap-5 md:grid-cols-3">
-            {t.reviews.items.map((review, idx) => (
+            {visibleReviews.map((review, idx) => (
               <motion.div
                 key={review.name}
                 initial="hidden"
@@ -270,7 +344,7 @@ export function LandingPage({ locale }: LandingPageProps) {
                 <Card className="h-full border-slate-200 bg-[#fdfdfc]">
                   <CardContent>
                     <div className="mb-4 flex gap-1 text-[#d4af37]">
-                      {Array.from({ length: 5 }).map((_, i) => (
+                      {Array.from({ length: Math.max(1, Math.min(5, Math.round(review.rating))) }).map((_, i) => (
                         <Star key={i} className="h-4 w-4 fill-current" />
                       ))}
                     </div>
@@ -284,6 +358,16 @@ export function LandingPage({ locale }: LandingPageProps) {
                 </Card>
               </motion.div>
             ))}
+          </div>
+          <div className="mt-6 text-center">
+            <a
+              href={GOOGLE_MAPS_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm font-medium text-[#0f1f33] underline underline-offset-4 hover:text-[#b18a16]"
+            >
+              Read more reviews on Google
+            </a>
           </div>
         </div>
       </section>
@@ -311,7 +395,7 @@ export function LandingPage({ locale }: LandingPageProps) {
                 {t.contact.address}
               </p>
             </div>
-            <a href="https://wa.me/212600000000" className={cn(buttonVariants(), "mt-8")}>
+            <a href={WHATSAPP_URL} className={cn(buttonVariants(), "mt-8")}>
               {t.contact.book}
             </a>
           </motion.div>
@@ -319,7 +403,7 @@ export function LandingPage({ locale }: LandingPageProps) {
           <div className="min-h-[320px] overflow-hidden rounded-3xl border border-slate-200 bg-white">
             <iframe
               title={t.contact.mapTitle}
-              src="https://maps.google.com/maps?q=Laattaouia%20Morocco&t=&z=14&ie=UTF8&iwloc=&output=embed"
+              src="https://maps.google.com/maps?q=NAJMI%20OPTIC%20Laattaouia&t=&z=14&ie=UTF8&iwloc=&output=embed"
               className="h-full min-h-[320px] w-full"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -344,10 +428,20 @@ export function LandingPage({ locale }: LandingPageProps) {
           <div>
             <p className="text-base font-semibold text-white">{t.footer.followTitle}</p>
             <div className="mt-3 space-y-1">
-              <a className="block hover:text-[#f1d37c]" href="#">
+              <a
+                className="block hover:text-[#f1d37c]"
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
                 Instagram
               </a>
-              <a className="block hover:text-[#f1d37c]" href="#">
+              <a
+                className="block hover:text-[#f1d37c]"
+                href={FACEBOOK_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
                 Facebook
               </a>
             </div>
@@ -359,7 +453,7 @@ export function LandingPage({ locale }: LandingPageProps) {
       </footer>
 
       <a
-        href="https://wa.me/212600000000"
+        href={WHATSAPP_URL}
         className="fixed bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-lg md:hidden"
       >
         <ShieldCheck className="h-4 w-4" />
