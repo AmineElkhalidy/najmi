@@ -8,6 +8,7 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -30,8 +31,11 @@ export default async function RootLayout({
       lang={locale}
       dir={direction}
       className={`${inter.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className={`${inter.className} min-h-full flex flex-col`}>
+        {children}
+      </body>
     </html>
   );
 }
