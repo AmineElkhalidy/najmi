@@ -161,7 +161,7 @@ export function LandingPage({ locale }: LandingPageProps) {
                     "rounded-full px-2 py-1 text-xs transition",
                     locale === item.locale
                       ? "bg-[#d4af37] text-[#0f1f33]"
-                      : "text-white/80 hover:text-white"
+                      : "text-white/80 hover:text-white",
                   )}
                 >
                   {item.label}
@@ -186,7 +186,7 @@ export function LandingPage({ locale }: LandingPageProps) {
       </header>
 
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?auto=format&fit=crop&w=1600&q=80')] bg-cover bg-center" />
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1517948430535-1e2469d314fe?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f1f33]/75 via-[#0f1f33]/80 to-[#0f1f33]/90" />
         <div className="relative mx-auto flex min-h-[75vh] w-full max-w-6xl flex-col justify-center px-4 py-24 sm:px-6">
           <motion.div
@@ -234,7 +234,9 @@ export function LandingPage({ locale }: LandingPageProps) {
           transition={{ duration: 0.6 }}
           className="mb-10 text-center"
         >
-          <h2 className="text-3xl font-semibold text-[#0f1f33]">{t.why.title}</h2>
+          <h2 className="text-3xl font-semibold text-[#0f1f33]">
+            {t.why.title}
+          </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">
             {t.why.subtitle}
           </p>
@@ -309,7 +311,9 @@ export function LandingPage({ locale }: LandingPageProps) {
         className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20"
       >
         <div className="rounded-3xl border border-[#d4af37]/25 bg-gradient-to-r from-[#0f1f33] to-[#152b45] p-8 text-white sm:p-10">
-          <h2 className="text-2xl font-semibold sm:text-3xl">{t.collection.title}</h2>
+          <h2 className="text-2xl font-semibold sm:text-3xl">
+            {t.collection.title}
+          </h2>
           <p className="mt-3 max-w-2xl text-sm text-white/80 sm:text-base">
             {t.collection.subtitle}
           </p>
@@ -319,7 +323,9 @@ export function LandingPage({ locale }: LandingPageProps) {
       <section id="reviews" className="bg-white py-16 sm:py-20">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
           <div className="mb-10 text-center">
-            <h2 className="text-3xl font-semibold text-[#0f1f33]">{t.reviews.title}</h2>
+            <h2 className="text-3xl font-semibold text-[#0f1f33]">
+              {t.reviews.title}
+            </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">
               {t.reviews.subtitle}
             </p>
@@ -344,7 +350,12 @@ export function LandingPage({ locale }: LandingPageProps) {
                 <Card className="h-full border-slate-200 bg-[#fdfdfc]">
                   <CardContent>
                     <div className="mb-4 flex gap-1 text-[#d4af37]">
-                      {Array.from({ length: Math.max(1, Math.min(5, Math.round(review.rating))) }).map((_, i) => (
+                      {Array.from({
+                        length: Math.max(
+                          1,
+                          Math.min(5, Math.round(review.rating)),
+                        ),
+                      }).map((_, i) => (
                         <Star key={i} className="h-4 w-4 fill-current" />
                       ))}
                     </div>
@@ -385,7 +396,9 @@ export function LandingPage({ locale }: LandingPageProps) {
             transition={{ duration: 0.5 }}
             className="rounded-3xl bg-[#0f1f33] p-8 text-white sm:p-10"
           >
-            <h2 className="text-2xl font-semibold sm:text-3xl">{t.contact.title}</h2>
+            <h2 className="text-2xl font-semibold sm:text-3xl">
+              {t.contact.title}
+            </h2>
             <p className="mt-4 text-sm text-white/85 sm:text-base">
               {t.contact.subtitle}
             </p>
@@ -415,18 +428,24 @@ export function LandingPage({ locale }: LandingPageProps) {
       <footer className="bg-[#0a1728]">
         <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 text-sm text-white/80 sm:px-6 md:grid-cols-3">
           <div>
-            <p className="text-base font-semibold text-white">{t.footer.aboutTitle}</p>
+            <p className="text-base font-semibold text-white">
+              {t.footer.aboutTitle}
+            </p>
             <p className="mt-3 leading-relaxed">{t.footer.aboutText}</p>
           </div>
 
           <div>
-            <p className="text-base font-semibold text-white">{t.footer.hoursTitle}</p>
+            <p className="text-base font-semibold text-white">
+              {t.footer.hoursTitle}
+            </p>
             <p className="mt-3">{t.footer.hoursWeek}</p>
             <p>{t.footer.hoursSunday}</p>
           </div>
 
           <div>
-            <p className="text-base font-semibold text-white">{t.footer.followTitle}</p>
+            <p className="text-base font-semibold text-white">
+              {t.footer.followTitle}
+            </p>
             <div className="mt-3 space-y-1">
               <a
                 className="block hover:text-[#f1d37c]"
