@@ -16,6 +16,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import type { Locale } from "@/lib/i18n";
+import { localePath, storePath } from "@/lib/locale-paths";
 import { formatPrice } from "@/lib/products";
 import {
   selectCartSubtotal,
@@ -76,7 +77,7 @@ export function CartSheet({ locale, dict }: CartSheetProps) {
             </p>
             <p className="text-sm text-slate-500">{dict.cart.emptyHint}</p>
             <Link
-              href={`/${locale}/shop`}
+              href={storePath(locale)}
               onClick={close}
               className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-gold-dark underline-offset-4 hover:underline"
             >
@@ -95,7 +96,7 @@ export function CartSheet({ locale, dict }: CartSheetProps) {
                   className="flex gap-3 rounded-2xl border border-slate-100 p-3"
                 >
                   <Link
-                    href={`/${locale}/product/${line.slug}`}
+                    href={localePath(locale, `/product/${line.slug}`)}
                     onClick={close}
                     className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-cream"
                   >
@@ -114,7 +115,7 @@ export function CartSheet({ locale, dict }: CartSheetProps) {
                           {line.brand}
                         </p>
                         <Link
-                          href={`/${locale}/product/${line.slug}`}
+                          href={localePath(locale, `/product/${line.slug}`)}
                           onClick={close}
                           className="text-sm font-semibold text-navy hover:text-gold-dark"
                         >
@@ -197,7 +198,7 @@ export function CartSheet({ locale, dict }: CartSheetProps) {
                 {dict.cart.checkout}
               </Button>
               <Link
-                href={`/${locale}/shop`}
+                href={storePath(locale)}
                 onClick={close}
                 className="text-center text-xs font-medium text-slate-500 underline-offset-4 hover:underline"
               >

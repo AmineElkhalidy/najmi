@@ -14,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import type { Locale } from "@/lib/i18n";
+import { storePath } from "@/lib/locale-paths";
 import type {
   FaceShape,
   FrameShape,
@@ -153,7 +154,7 @@ export function FiltersSidebar({
       }
 
       const qs = params.toString();
-      return `/${locale}/shop${qs ? `?${qs}` : ""}`;
+      return storePath(locale, qs);
     };
   }, [locale, priceRange, searchParams]);
 
@@ -176,7 +177,7 @@ export function FiltersSidebar({
 
   const clearAll = () => {
     startTransition(() => {
-      router.push(`/${locale}/shop`, { scroll: false });
+      router.push(storePath(locale), { scroll: false });
     });
   };
 

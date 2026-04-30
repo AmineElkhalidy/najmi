@@ -9,6 +9,12 @@ import {
   Truck,
 } from "lucide-react";
 
+import { NewsletterForm } from "@/components/shop/newsletter-form";
+import type { Locale } from "@/lib/i18n";
+import { localePath, storePath } from "@/lib/locale-paths";
+import type { ShopDictionary } from "@/lib/shop-i18n";
+import { WHATSAPP_URL } from "@/lib/site-urls";
+
 function InstagramIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -45,16 +51,11 @@ function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-import { NewsletterForm } from "@/components/shop/newsletter-form";
-import type { Locale } from "@/lib/i18n";
-import type { ShopDictionary } from "@/lib/shop-i18n";
-
 type FooterProps = {
   locale: Locale;
   dict: ShopDictionary;
 };
 
-const WHATSAPP_URL = "https://wa.me/212659399604";
 const INSTAGRAM_URL = "https://www.instagram.com/najmi_optic/";
 const FACEBOOK_URL = "https://web.facebook.com/profile.php?id=61586937009405";
 
@@ -67,17 +68,26 @@ export function Footer({ locale, dict }: FooterProps) {
   ];
 
   const shopLinks = [
-    { label: dict.nav.men, href: `/${locale}/shop?category=men` },
-    { label: dict.nav.women, href: `/${locale}/shop?category=women` },
-    { label: dict.nav.kids, href: `/${locale}/shop?category=kids` },
-    { label: dict.nav.sunglasses, href: `/${locale}/shop?category=sunglasses` },
-    { label: dict.nav.accessories, href: `/${locale}/shop?category=accessories` },
+    { label: dict.nav.men, href: localePath(locale, "/", "category=men") },
+    {
+      label: dict.nav.women,
+      href: localePath(locale, "/", "category=women"),
+    },
+    { label: dict.nav.kids, href: localePath(locale, "/", "category=kids") },
+    {
+      label: dict.nav.sunglasses,
+      href: localePath(locale, "/", "category=sunglasses"),
+    },
+    {
+      label: dict.nav.accessories,
+      href: localePath(locale, "/", "category=accessories"),
+    },
   ];
 
   const helpLinks = [
-    { label: dict.nav.appointment, href: `/${locale}#contact` },
-    { label: dict.product.shipping, href: `/${locale}/shop` },
-    { label: dict.footer.returnPolicy, href: `/${locale}/shop` },
+    { label: dict.nav.appointment, href: WHATSAPP_URL },
+    { label: dict.product.shipping, href: storePath(locale) },
+    { label: dict.footer.returnPolicy, href: storePath(locale) },
     { label: dict.footer.customerCare, href: WHATSAPP_URL },
   ];
 
@@ -99,7 +109,7 @@ export function Footer({ locale, dict }: FooterProps) {
       <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
         <div>
           <Link
-            href={`/${locale}`}
+            href={localePath(locale, "/")}
             className="inline-flex items-center gap-2"
             aria-label="Najmi Optic"
           >

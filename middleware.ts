@@ -26,9 +26,19 @@ export function middleware(request: NextRequest) {
     });
   }
 
+  /* Unprefixed URLs (/ and /product/…) serve the default locale without redirecting. */
   const url = request.nextUrl.clone();
-  url.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
-  return NextResponse.redirect(url);
+  url.pathname =
+    pathname === "/" ? `/${defaultLocale}` : `/${defaultLocale}${pathname}`;
+
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-locale", defaultLocale);
+
+  return NextResponse.rewrite(url, {
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
 
 export const config = {

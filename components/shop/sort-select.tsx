@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 
 import type { Locale } from "@/lib/i18n";
+import { storePath } from "@/lib/locale-paths";
 import type { ShopDictionary } from "@/lib/shop-i18n";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +28,7 @@ export function SortSelect({ locale, dict, className }: SortSelectProps) {
     else params.set("sort", next);
     const qs = params.toString();
     startTransition(() => {
-      router.push(`/${locale}/shop${qs ? `?${qs}` : ""}`, {
+      router.push(storePath(locale, qs || null), {
         scroll: false,
       });
     });

@@ -16,6 +16,7 @@ import { ProductCard } from "@/components/shop/product-card";
 import { ProductGallery } from "@/components/shop/product-gallery";
 import { Badge } from "@/components/ui/badge";
 import { isLocale } from "@/lib/i18n";
+import { localePath, storePath } from "@/lib/locale-paths";
 import { formatPrice, getProductBySlugOrId, getRelatedProducts, products } from "@/lib/products";
 import { shopDictionary } from "@/lib/shop-i18n";
 
@@ -69,14 +70,14 @@ export default async function ProductPage(
           className="flex items-center gap-1.5 text-xs text-slate-500"
         >
           <Link
-            href={`/${locale}`}
+            href={localePath(locale, "/")}
             className="transition hover:text-gold-dark"
           >
             {dict.shop.breadcrumbHome}
           </Link>
           <ChevronRight className="h-3.5 w-3.5" aria-hidden />
           <Link
-            href={`/${locale}/shop`}
+            href={storePath(locale)}
             className="transition hover:text-gold-dark"
           >
             {dict.shop.breadcrumbShop}
@@ -227,7 +228,7 @@ export default async function ProductPage(
                 {dict.product.relatedTitle}
               </h2>
               <Link
-                href={`/${locale}/shop`}
+                href={storePath(locale)}
                 className="text-sm font-medium text-gold-dark underline-offset-4 hover:underline"
               >
                 {dict.cart.continueShopping}

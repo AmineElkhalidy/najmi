@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight } from "lucide-react";
 
 import { FiltersSidebar } from "@/components/shop/filters-sidebar";
 import { ProductCard } from "@/components/shop/product-card";
 import { SortSelect } from "@/components/shop/sort-select";
 import { isLocale } from "@/lib/i18n";
+import { localePath } from "@/lib/locale-paths";
 import {
   PRICE_BOUNDS,
   filterProducts,
@@ -15,13 +15,13 @@ import {
 import { shopDictionary } from "@/lib/shop-i18n";
 
 export const metadata: Metadata = {
-  title: "Shop · Najmi Optic",
+  title: "Najmi Optic · Premium Eyewear",
   description:
     "Discover premium frames, sunglasses, and accessories curated by Najmi Optic in Laattaouia.",
 };
 
-export default async function ShopPage(
-  props: PageProps<"/[locale]/shop">,
+export default async function StoreHomePage(
+  props: PageProps<"/[locale]">,
 ) {
   const { locale } = await props.params;
   if (!isLocale(locale)) notFound();
@@ -31,26 +31,43 @@ export default async function ShopPage(
   const query = parseProductQuery(searchParams);
   const productsList = filterProducts(query);
 
+  const hasQueryFilters = Boolean(
+    searchParams.category ||
+      searchParams.shape ||
+      searchParams.face ||
+      searchParams.gender ||
+      searchParams.min ||
+      searchParams.max ||
+      searchParams.sort ||
+      searchParams.q,
+  );
+
   return (
     <div className="bg-cream">
       <div className="mx-auto w-full max-w-7xl px-4 pb-20 pt-8 sm:px-6 lg:pt-12">
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-1.5 text-xs text-slate-500"
-        >
-          <Link
-            href={`/${locale}`}
-            className="transition hover:text-gold-dark"
+        {hasQueryFilters ? (
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-2 text-xs text-slate-500"
           >
-            {dict.shop.breadcrumbHome}
-          </Link>
-          <ChevronRight className="h-3.5 w-3.5" aria-hidden />
-          <span className="font-semibold text-navy">
-            {dict.shop.breadcrumbShop}
-          </span>
-        </nav>
+            <Link
+              href={localePath(locale, "/")}
+              className="transition hover:text-gold-dark"
+            >
+              {dict.shop.breadcrumbHome}
+            </Link>
+            <span aria-hidden>/</span>
+            <span className="font-semibold text-navy">
+              {dict.shop.breadcrumbShop}
+            </span>
+          </nav>
+        ) : (
+          <p className="text-xs uppercase tracking-[0.2em] text-gold-dark">
+            Najmi Optic
+          </p>
+        )}
 
-        <header className="mt-6 flex flex-col gap-3">
+        <header className={`flex flex-col gap-3 ${hasQueryFilters ? "mt-6" : "mt-3"}`}>
           <h1 className="text-3xl font-semibold tracking-tight text-navy sm:text-4xl">
             {dict.shop.pageTitle}
           </h1>

@@ -20,8 +20,10 @@ import { CartButton } from "@/components/shop/cart-button";
 import { SearchBar } from "@/components/shop/search-bar";
 import { buttonVariants } from "@/components/ui/button";
 import type { Locale } from "@/lib/i18n";
+import { localePath } from "@/lib/locale-paths";
 import { cn } from "@/lib/utils";
 import type { ShopDictionary } from "@/lib/shop-i18n";
+import { WHATSAPP_URL } from "@/lib/site-urls";
 
 type NavbarProps = {
   locale: Locale;
@@ -46,7 +48,8 @@ const localeOptions: Array<{ locale: Locale; label: string }> = [
 ];
 
 function buildMegaMenu(locale: Locale, dict: ShopDictionary): MegaCategory[] {
-  const base = (path: string) => `/${locale}/shop${path}`;
+  const base = (query: string) =>
+    localePath(locale, "/", query.replace(/^\?/, ""));
   return [
     {
       key: "men",
@@ -243,7 +246,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
             {localeOptions.map((option) => (
               <Link
                 key={option.locale}
-                href={`/${option.locale}`}
+                href={localePath(option.locale, "/")}
                 className={cn(
                   "rounded-full px-2 py-0.5 text-[11px] font-semibold transition",
                   option.locale === locale
@@ -269,7 +272,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
         </button>
 
         <Link
-          href={`/${locale}`}
+          href={localePath(locale, "/")}
           className="flex items-center gap-2"
           aria-label="Najmi Optic"
         >
@@ -341,8 +344,10 @@ export function Navbar({ locale, dict }: NavbarProps) {
           >
             <Search className="h-5 w-5" />
           </button>
-          <Link
-            href={`/${locale}#contact`}
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className={cn(
               buttonVariants({ variant: "navy", size: "sm" }),
               "hidden md:inline-flex",
@@ -350,7 +355,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
           >
             <CalendarCheck className="h-4 w-4" />
             {dict.nav.appointment}
-          </Link>
+          </a>
           <button
             type="button"
             aria-label={dict.nav.account}
@@ -475,7 +480,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
             >
               <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
                 <Link
-                  href={`/${locale}`}
+                  href={localePath(locale, "/")}
                   onClick={() => setMobileOpen(false)}
                   className="flex items-center gap-2"
                 >
@@ -499,7 +504,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
                 <ul className="space-y-1.5">
                   <li>
                     <Link
-                      href={`/${locale}/shop`}
+                      href={localePath(locale, "/")}
                       onClick={() => setMobileOpen(false)}
                       className="block rounded-xl bg-cream px-4 py-3 text-sm font-semibold text-navy"
                     >
@@ -526,7 +531,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
                     {localeOptions.map((option) => (
                       <Link
                         key={option.locale}
-                        href={`/${option.locale}`}
+                        href={localePath(option.locale, "/")}
                         onClick={() => setMobileOpen(false)}
                         className={cn(
                           "rounded-full px-3 py-1.5 text-xs font-semibold transition",
@@ -542,14 +547,16 @@ export function Navbar({ locale, dict }: NavbarProps) {
                 </div>
               </nav>
               <div className="border-t border-slate-100 p-5">
-                <Link
-                  href={`/${locale}#contact`}
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
                   className={cn(buttonVariants({ variant: "navy" }), "w-full")}
                 >
                   <CalendarCheck className="h-4 w-4" />
                   {dict.nav.appointment}
-                </Link>
+                </a>
               </div>
             </motion.aside>
           </motion.div>

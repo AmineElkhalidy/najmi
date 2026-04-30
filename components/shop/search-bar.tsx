@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import type { Locale } from "@/lib/i18n";
+import { localePath, storePath } from "@/lib/locale-paths";
 
 type SearchBarProps = {
   placeholder: string;
@@ -23,7 +24,7 @@ export function SearchBar({ placeholder, locale, className }: SearchBarProps) {
     const search = trimmed
       ? `?q=${encodeURIComponent(trimmed)}`
       : "";
-    router.push(`/${locale}/shop${search}`);
+    router.push(storePath(locale, search.replace(/^\?/, "")));
   };
 
   return (

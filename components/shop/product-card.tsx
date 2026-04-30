@@ -7,6 +7,7 @@ import { Star } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import type { Locale } from "@/lib/i18n";
+import { localePath } from "@/lib/locale-paths";
 import { formatPrice, type Product } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +33,7 @@ export function ProductCard({ product, locale, priority }: ProductCardProps) {
       className="group relative flex flex-col"
     >
       <Link
-        href={`/${locale}/product/${product.slug}`}
+        href={localePath(locale, `/product/${product.slug}`)}
         aria-label={product.name}
         className="relative block aspect-[4/3] overflow-hidden rounded-2xl bg-white ring-1 ring-slate-100 transition-all duration-500 hover:ring-gold/40"
       >
@@ -87,7 +88,7 @@ export function ProductCard({ product, locale, priority }: ProductCardProps) {
           {product.brand}
         </p>
         <Link
-          href={`/${locale}/product/${product.slug}`}
+          href={localePath(locale, `/product/${product.slug}`)}
           className="text-base font-semibold text-navy transition hover:text-gold-dark"
         >
           {product.name}
