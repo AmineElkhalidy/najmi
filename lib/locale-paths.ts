@@ -15,7 +15,7 @@ export function toSearchSuffix(
 
 /**
  * Locale-aware path. Default locale (fr) stays unprefixed so `/` and `/product/slug`
- * work with middleware rewrite; `/en/...` and `/ar/...` keep the prefix.
+ * work with proxy rewrite; `/en/...` and `/ar/...` keep the prefix.
  */
 export function localePath(
   locale: Locale,
